@@ -1,0 +1,129 @@
+испітано на прошивке Распбиан без ДЕСКтопа
+
+Обновляемся 
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo reboot
+
+-------------------------------------------------------
+Устанавливаем мостик мавлинк
+
+sudo apt-get install python3-dev python3-opencv python3-wxgtk4.0 python3-pip python3-matplotlib python3-lxml python3-pygame -y
+
+pip3 install PyYAML mavproxy --user
+
+echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
+
+
+
+если блокирует, пробуем  sudo usermod -a -G dialout <username>
+---------------------------------------------------------
+Включаем UART в sudo raspi-config 
+
+на первом пункте -нет на втором -да
+
+также включаем камеру
+не забіваем отключить блютуз
+
+sudo nano /boot/config.txt
+dtoverlay=disable-bt
+
+---------------------------------------------------------
+
+устанавливаем Жстример
+
+sudo apt-get install gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev -y
+
+
+sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-ugly gstreamer1.0-tools gstreamer1.0-gl gstreamer1.0-gtk3 -y
+
+sudo apt-get install libx264-dev libjpeg-dev -y
+
+---------------------------------------------------------
+
+устанавливаем библиотеку для камері
+
+git clone https://github.com/thaytan/gst-rpicamsrc.git
+sudo apt-get install autoconf automake libtool pkg-config libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libraspberrypi-dev
+cd gst-rpicamsrc 
+./autogen.sh --prefix=/usr --libdir=/usr/lib/arm-linux-gnueabihf/
+make
+sudo make install
+
+
+
+
+
+https://discuss.ardupilot.org/t/start-mavproxy-as-a-service/54987/9
+автозапуск /usr/local/bin/mavproxy.py --master
+==========================================================================
+
+Запускаем телеметрию
+
+mavproxy.py --master=/dev/ttyAMA0 --out 192.168.0.106:14550 --aircraft MyCopter
+
+Запускаем видео поток
+
+raspivid -n  -ex fixedfps -w 1920 -h 1000 -b 4000000 -fps 30 -vf -hf -t 0 -o - |                gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=1 pt=35 ! udpsink sync=false host=192.168.0.101 port=5600
+
+
+
+__________________________________________________________________
+systemctl list-unit-files можно глянуть запущеніе юниті
+
+sudo nano /etc/systemd/system/mavproxy.service
+
+sudo systemctl daemon-reload
+
+sudo systemctl start mystart.service
+__________________________________________________________________
+
+
+
+
+ТАК РАБОТАЕТ!!!_____________________________________________________________________
+источник
+https://gist.github.com/tstellanova/37f1f08cd3a2c9019436b62563fc5dc8 
+
+Убедитесь screen, что установлено: sudo apt-get install screen
+
+Баш скрипт
+
+sudo nano mavrelay.sh 
+sudo chmod +x mavrelay.sh
+
+#! /bin/bash
+ stty  -F /dev/ttyAMA0 57600  raw -echo -echoe -echok -iexten -echoctl -echoke
+ # optional: provides RTCM injection if ublox m8p is connected to usb
+ # socat UDP-DATAGRAM:127.0.0.1:13320 file:/dev/ttyACM0
+~pi/.local//bin/mavproxy.py --master=/dev/ttyAMA0 --out=udpbcast:192.168.0.105:14550 --source-system=197
+
+-----------
+
+Демон с автозапуском 
+
+sudo nano /etc/systemd/system/mavproxy.service
+
+------------
+
+[Unit]
+Description=Mavproxy runner
+After=default.target
+
+[Service]
+Restart=on-failure
+ExecStart=su - pi -c "cd ~pi; screen -L -dmS mavbarn ~pi/mavrelay.sh"
+
+[Install]
+WantedBy=default.target
+
+
+
+
+
+
+
+
+
+

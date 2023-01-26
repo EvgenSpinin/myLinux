@@ -1,0 +1,166 @@
+
+#!/bin/bash
+
+echo "Start"
+echo "==============================="
+echo "UPDATE"
+echo "==============================="
+sudo apt update
+sudo apt dist-upgrade -y
+sudo apt install git -y
+echo "==============================="
+echo "PYTHON"
+echo "==============================="
+sudo apt install python3-dev python3-pip python3-numpy -y
+pip3 install --upgrade pip setuptools wheel
+pip3 install flask pyserial 
+echo "==============================="
+echo "OPENCV"
+echo "==============================="
+sudo apt install python3-opencv -y
+pip install imutils
+echo "==============================="
+echo "GSTREAMER"
+echo "==============================="
+sudo apt-get install gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev -y
+
+
+sudo apt-get install libx264-dev libjpeg-dev -y
+
+sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-ugly gstreamer1.0-tools gstreamer1.0-gl gstreamer1.0-gtk3 -y
+
+ Запустите команду gstreamer videotest
+gst-launch-1.0 videotestsrc ! videoconvert ! autovideosink
+
+
+echo "==============================="
+echo "ZEROTIER"
+echo "==============================="
+curl -s 'https://raw.githubusercontent.com/zerotier/ZeroTierOne/master/doc/contact%40zerotier.com.gpg' | gpg --import && \
+if z=$(curl -s 'https://install.zerotier.com/' | gpg); then echo "$z" | sudo bash; fi
+
+echo "==============================="
+echo "CHEK ZEROTIER"
+echo "==============================="
+sudo zerotier-cli join db64858fedb260b0
+echo "==============================="
+echo "PRICAMSSRC"
+echo "==============================="
+cd
+git clone https://github.com/thaytan/gst-rpicamsrc.git
+sudo apt-get install autoconf automake libtool pkg-config libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libraspberrypi-dev
+cd gst-rpicamsrc 
+./autogen.sh --prefix=/usr --libdir=/usr/lib/arm-linux-gnueabihf/
+make
+sudo make install
+echo "==============================="
+echo "RTPS-SERVER"
+echo "==============================="
+
+cd
+wget https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.4.tar.xz
+tar -xf gst-rtsp-server-1.10.4.tar.xz 
+cd gst-rtsp-server-1.10.4
+./configure 
+make
+sudo make install
+
+echo "==============================="
+echo "WI FI TOCHKA DOSTUPA"
+echo "==============================="
+cd
+sudo apt install hostapd
+sudo apt install dnsmasq
+sudo systemctl stop hostapd
+
+ерфейс=wlan0
+драйвер = nl80211
+ssid=RPiHotSpot
+hw_mode=g
+канал=8
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid = 0
+wpa=2
+wpa_passphrase=1234567890
+wpa_key_mgmt = WPA-PSK
+wpa_pairwise=ТКИП
+rsn_pairwise = CCMP
+
+
+sudo nano /etc/default/hostapd
+заменяем:
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+sudo nano /etc/dnsmasq.conf
+в конце файла:
+#RPiHotspot config - No Intenet
+interface=wlan0
+domain-needed
+bogus-priv
+dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
+
+sudo nano /etc/network/interfaces
+закріваем строчку #
+source-directory /etc/network/interfaces.d
+
+делаем резерв
+sudo cp /etc/network/interfaces /etc/network/interfaces-backup
+
+sudo nano /etc/dhcpcd.conf
+
+в самом низу
+interface wlan0
+nohook wpa_supplicant
+static ip_address=192.168.50.10/24
+static routers=192.168.50.1
+
+
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+sudo systemctl start hostapd
+sudo systemctl reload dnsmasq
+
+
+
+
+
+
+
+echo "==============================="
+echo "IMX327 for RASPBERRY"
+echo "==============================="
+
+cd
+git clone https://github.com/veyeimaging/raspberrypi.git
+cd raspberrypi/veye_raspcam/bin/
+chmod +x *
+cd
+_________________________________________________________________________
+
+Сначала квключам I2C SPI камеру , sudo apt update ....НЕ ОБНОВЛЯЕМСЯ!!!!
+проверка dmesg | grep veye , должно біть "veyecam2m camera probed"
+echo "==============================="
+echo "IMX327 foe 4L2scr"
+echo "==============================="
+
+cd
+wget https://github.com/veyeimaging/raspberrypi_v4l2/releases/latest/download/raspberrypi_v4l2.tgz
+tar -xzvf raspberrypi_v4l2.tgz
+cd raspberrypi_v4l2/release/
+chmod +x *
+sudo ./install_driver.sh veyecam2m
+cd
+
+
+проверка
+gst-launch-1.0 v4l2src device=/dev/video0 ! decodebin ! videoconvert ! ximagesink
+
+
+
+
+
+
+
+
